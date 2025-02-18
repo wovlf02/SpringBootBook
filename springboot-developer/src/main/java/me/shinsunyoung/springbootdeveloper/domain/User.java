@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Entity
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
@@ -26,13 +25,17 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "nickname", unique = true)
+    private String nickname;
+
     @Column(name = "password")
     private String password;
 
     @Builder
-    public User(String email, String password, String auth) {
+    public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
     }
 
     @Override
@@ -40,39 +43,37 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("user"));
     }
 
-    // 사용자의 id를 반환
     @Override
     public String getUsername() {
         return email;
     }
 
-    // 패스워드 반환
     @Override
     public String getPassword() {
         return password;
     }
-
-    // 계정 만료 여부 반환
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // 계정 잠금 여부 반환
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // 패스워드의 만료 여부 반환
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // 계정 사용 가능 여부 반환
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User update(String nickname) {
+        this.nickname = nickname;
+        return this;
     }
 }

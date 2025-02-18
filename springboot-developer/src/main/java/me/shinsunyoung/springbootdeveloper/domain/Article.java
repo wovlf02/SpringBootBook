@@ -11,12 +11,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
 public class Article {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
@@ -28,6 +27,8 @@ public class Article {
     @Column(name = "content", nullable = false)
     private String content;
 
+
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -36,8 +37,12 @@ public class Article {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "author", nullable = false)
+    private String author;
+
     @Builder
-    public Article(String title, String content) {
+    public Article(String author, String title, String content) {
+        this.author = author;
         this.title = title;
         this.content = content;
     }
@@ -46,5 +51,4 @@ public class Article {
         this.title = title;
         this.content = content;
     }
-
 }
